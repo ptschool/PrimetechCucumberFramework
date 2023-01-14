@@ -11,156 +11,96 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.cucumber.java.en.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import pageObjects.DashboardPage;
 import pageObjects.HomePage;
+import pageObjects.LoginPgae;
 
 public class Steps {
 
 	WebDriver driver;
 	HomePage homePage;
+	LoginPgae loginPage;
+	DashboardPage dashboardPage;
 
 	@Given("user is on the Home Page")
-	public void user_is_on_the_home_page() {
-		/*
-		 * Starting the Chrome Driver
-		 * 
-		 */
-		// Setup Chrome Driver
+	public void user_is_on_the_home_page() throws InterruptedException {
+
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.get("https://primetech-store-qa.herokuapp.com/");
 
-		/*
-		 * Verify the correct Page is loaded 1. Verify the page title: Prime Tech School
-		 * 2.Verify the URL: https://primetech-store-qa.herokuapp.com/ 3. Verify Logo:
-		 * Sporting Goods Shop
-		 */
-		
-		
 		// We will create Object Of Home Page Class
 		homePage = new HomePage(driver);
-		
-		//We will call the verify page logo methods
+
+		// We will call the verify page logo methods
 		homePage.verifyLogo();
-		
+
 		// We will call verify page url method
-		homePage.verifyURL();
-		
-		//We will call verify page title method
+		homePage.verifyURL("https://primetech-store-qa.herokuapp.com/");
+
+		// We will call verify page title method
 		homePage.verifyTitle();
-		
-		
-		
-		
 
 	}
 
 	@When("user click on login button")
 	public void user_click_on_login_button() {
+		homePage.clickWelcomeLink();
 		homePage.clickLoginButton();
 	}
 
 	@Then("user verify Login Page URL")
 	public void user_verify_login_page_url() {
-		// Verifying the Login Page URL
-		String actualLoginPageURL = driver.getCurrentUrl();
-		String expectedLoginPageURL = "https://primetech-store-qa.herokuapp.com/login";
-		if (!actualLoginPageURL.equals(expectedLoginPageURL)) {
-			throw new RuntimeException("Login Page URL is not correct");
-		}
+		loginPage = new LoginPgae(driver);
 	}
 
 	@Then("user verify Login Page Logo")
 	public void user_verify_login_page_logo() {
-		// Verifying the Login Page Header with Text: Login is Exist
-		new WebDriverWait(driver, Duration.ofSeconds(10))
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h2[text()='Login']")));
+		loginPage.verifyPageHeader();
 
 	}
 
 	@Then("user login with valid credentials")
 	public void user_login_with_valid_credentials() {
-		/*
-		 * Login using a valid credentials: pt_test@gmail.com Test@1234 1. Enter Email
-		 * Address 2. Enter Password 3. Click Login Button
-		 * 
-		 */
-		driver.findElement(By.xpath("//label[text()='Email Address']/..//input")).sendKeys("pt_test@gmail.com");
-		driver.findElement(By.name("password")).sendKeys("Test@1234");
-		driver.findElement(By.xpath("//*[text()='Login']/parent::button")).click();
+		loginPage.enterEmail("pt_test@gmail.com");
+		loginPage.enterPassword("Test@1234");
+		loginPage.clickLoginButton();
 
 	}
 
 	@When("user dashboard page is displayed")
 	public void user_dashboard_page_is_displayed() throws InterruptedException {
-		/*
-		 * Verify Login into the right account 1. Verify url is :
-		 * https://primetech-store-qa.herokuapp.com/dashboard 2. Account Details shows
-		 * as below: email: pt_test@gmail.com accountType: Member FirstName: PT
-		 * LastName: Test
-		 * 
-		 */
-		Thread.sleep(5000);
-		String actualDashBoardURL = driver.getCurrentUrl();
-		String expectedDashBoardURL = "https://primetech-store-qa.herokuapp.com/dashboard";
-		if (!actualDashBoardURL.equals(expectedDashBoardURL)) {
-			throw new RuntimeException("Dashboard Page URL is not correct");
-		}
+		dashboardPage = new DashboardPage(driver);
+		dashboardPage.verifyURL("https://primetech-store-qa.herokuapp.com/dashboard");
 	}
 
 	@Then("user verify Email")
 	public void user_verify_email() {
-		// Verify User Email
-		String actualEmail = driver.findElement(By.xpath("//*[@class='account-details']//*[@class='desc']//p"))
-				.getText().trim();
-		String expectedEmail = "pt_test@gmail.com";
-		if (!actualEmail.equals(expectedEmail)) {
-			throw new RuntimeException("Invalid Email Address: " + actualEmail);
-		}
+		dashboardPage.verifyEmail("pt_test@gmail.com");
 	}
 
 	@Then("user verify Account Type")
 	public void user_verify_account_type() {
-		// Verify User Account Type
-		String actualAccountType = driver
-				.findElement(By.xpath("//*[@class='account-details']//*[@class='desc']//*[contains(@class,'role')]"))
-				.getText().trim();
-		String expectedAccountType = "Member";
-		if (!actualAccountType.equals(expectedAccountType)) {
-			throw new RuntimeException("Invalid Account Type: " + actualAccountType);
-		}
+		dashboardPage.verifyAccountType("Member");
 	}
 
 	@Then("user verify First Name")
 	public void user_verify_first_name() {
-		// Verify FirstName
-		String actualFirstName = driver.findElement(By.name("firstName")).getDomProperty("value");
-		String expectedFirstName = "PT";
-		if (!actualFirstName.equals(expectedFirstName)) {
-			throw new RuntimeException("Invalid First Name: " + actualFirstName);
-		}
+		dashboardPage.verifyFirstName("PT");
 	}
 
 	@Then("user verify Last Name")
 	public void user_verify_last_name() {
-		// Verify Lastname
-
-		String actualLastName = driver.findElement(By.name("lastName")).getDomProperty("value");
-		String expectedLastName = "Test";
-		if (!actualLastName.equals(expectedLastName)) {
-			throw new RuntimeException("Invalid Last Name: " + actualLastName);
-		}
+		dashboardPage.verifyLastName("Test");
 	}
 
 	@When("user click logout button")
 	public void user_click_logout_button() {
-		// Locate the Account Dropdown
-		String firstName = "PT";
-		driver.findElement(By.linkText(firstName)).click();
+		dashboardPage.clickAccountDropdown("PT");
+		dashboardPage.clickSignoutButton();
 
-		new WebDriverWait(driver, Duration.ofSeconds(10))
-				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Sign Out']"))).click();
 	}
 
 	@Then("user closed the browser")
