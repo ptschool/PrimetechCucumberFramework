@@ -11,10 +11,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.cucumber.java.en.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import pageObjects.HomePage;
 
 public class Steps {
 
 	WebDriver driver;
+	HomePage homePage;
 
 	@Given("user is on the Home Page")
 	public void user_is_on_the_home_page() {
@@ -34,40 +36,29 @@ public class Steps {
 		 * 2.Verify the URL: https://primetech-store-qa.herokuapp.com/ 3. Verify Logo:
 		 * Sporting Goods Shop
 		 */
-		// Verify Page Title
-		String actualTitle = driver.getTitle();
-		String expectedTitle = "Prime Tech Store";
-		if (!actualTitle.equals(expectedTitle)) {
-			throw new RuntimeException("Title of the page does not match as expected: " + expectedTitle);
-		}
+		
+		
+		// We will create Object Of Home Page Class
+		homePage = new HomePage(driver);
+		
+		//We will call the verify page logo methods
+		homePage.verifyLogo();
+		
+		// We will call verify page url method
+		homePage.verifyURL();
+		
+		//We will call verify page title method
+		homePage.verifyTitle();
+		
+		
+		
+		
 
-		// Verify URL
-		String actualURL = driver.getCurrentUrl();
-		String expectedURL = "https://primetech-store-qa.herokuapp.com/";
-		if (!actualURL.equals(expectedURL)) {
-			throw new RuntimeException("Actual URL is not matching with expected url: " + expectedURL);
-		}
-
-		// Verify Logo
-		WebElement logoElem = driver.findElement(By.xpath("//h1[@class='logo']"));
-		String actualLogText = logoElem.getText();
-		String expectedLogoText = "Sporting Goods Shop";
-		if (!actualLogText.equals(expectedLogoText)) {
-			throw new RuntimeException("Actual Log Text is not matching with expected logo text: " + expectedLogoText);
-		}
 	}
 
 	@When("user click on login button")
 	public void user_click_on_login_button() {
-		// Click Welcome dropdown link
-		driver.findElement(By.linkText("Welcome!")).click();
-
-		// Waiting for the Login Button to be clickable within 10 seconds
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		WebElement loginElem = wait
-				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Login']")));
-		// Click login Element
-		loginElem.click();
+		homePage.clickLoginButton();
 	}
 
 	@Then("user verify Login Page URL")
