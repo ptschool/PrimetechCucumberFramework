@@ -1,5 +1,6 @@
+package stepDefinitions;
+
 import java.time.Duration;
-import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,12 +9,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.cucumber.java.en.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class E2E_Test {
-	private static WebDriver driver;
+public class Steps {
 
-	public static void main(String[] args) throws InterruptedException {
+	WebDriver driver;
+
+	@Given("user is on the Home Page")
+	public void user_is_on_the_home_page() {
 		/*
 		 * Starting the Chrome Driver
 		 * 
@@ -26,12 +30,11 @@ public class E2E_Test {
 		driver.get("https://primetech-store-qa.herokuapp.com/");
 
 		/*
-		 * Verify the correct Page is loaded
-		 *	1. Verify the page title: Prime Tech School
-		 *	2.Verify the URL: https://primetech-store-qa.herokuapp.com/
-		 * 	3. Verify Logo: Sporting Goods Shop
+		 * Verify the correct Page is loaded 1. Verify the page title: Prime Tech School
+		 * 2.Verify the URL: https://primetech-store-qa.herokuapp.com/ 3. Verify Logo:
+		 * Sporting Goods Shop
 		 */
-		//Verify Page Title
+		// Verify Page Title
 		String actualTitle = driver.getTitle();
 		String expectedTitle = "Prime Tech Store";
 		if (!actualTitle.equals(expectedTitle)) {
@@ -44,7 +47,7 @@ public class E2E_Test {
 		if (!actualURL.equals(expectedURL)) {
 			throw new RuntimeException("Actual URL is not matching with expected url: " + expectedURL);
 		}
-		
+
 		// Verify Logo
 		WebElement logoElem = driver.findElement(By.xpath("//h1[@class='logo']"));
 		String actualLogText = logoElem.getText();
@@ -52,13 +55,10 @@ public class E2E_Test {
 		if (!actualLogText.equals(expectedLogoText)) {
 			throw new RuntimeException("Actual Log Text is not matching with expected logo text: " + expectedLogoText);
 		}
-		
-		/*
-		 * Navigate to Login Page
-		 * 1. Click Welcome Dropdown
-		 * 2. Wait for Login Button become clickable
-		 * 3. Click Login Button
-		 */
+	}
+
+	@When("user click on login button")
+	public void user_click_on_login_button() {
 		// Click Welcome dropdown link
 		driver.findElement(By.linkText("Welcome!")).click();
 
@@ -68,24 +68,28 @@ public class E2E_Test {
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Login']")));
 		// Click login Element
 		loginElem.click();
+	}
 
-		/*
-		 * Verify login page is displayd 1. Verify the URL is:
-		 * https://primetech-store-qa.herokuapp.com/login 2. Verify the Login Page
-		 * Header is displayedL :Login
-		 * 
-		 */
-
+	@Then("user verify Login Page URL")
+	public void user_verify_login_page_url() {
 		// Verifying the Login Page URL
 		String actualLoginPageURL = driver.getCurrentUrl();
 		String expectedLoginPageURL = "https://primetech-store-qa.herokuapp.com/login";
 		if (!actualLoginPageURL.equals(expectedLoginPageURL)) {
 			throw new RuntimeException("Login Page URL is not correct");
 		}
+	}
+
+	@Then("user verify Login Page Logo")
+	public void user_verify_login_page_logo() {
 		// Verifying the Login Page Header with Text: Login is Exist
 		new WebDriverWait(driver, Duration.ofSeconds(10))
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h2[text()='Login']")));
 
+	}
+
+	@Then("user login with valid credentials")
+	public void user_login_with_valid_credentials() {
 		/*
 		 * Login using a valid credentials: pt_test@gmail.com Test@1234 1. Enter Email
 		 * Address 2. Enter Password 3. Click Login Button
@@ -95,6 +99,10 @@ public class E2E_Test {
 		driver.findElement(By.name("password")).sendKeys("Test@1234");
 		driver.findElement(By.xpath("//*[text()='Login']/parent::button")).click();
 
+	}
+
+	@When("user dashboard page is displayed")
+	public void user_dashboard_page_is_displayed() throws InterruptedException {
 		/*
 		 * Verify Login into the right account 1. Verify url is :
 		 * https://primetech-store-qa.herokuapp.com/dashboard 2. Account Details shows
@@ -108,6 +116,10 @@ public class E2E_Test {
 		if (!actualDashBoardURL.equals(expectedDashBoardURL)) {
 			throw new RuntimeException("Dashboard Page URL is not correct");
 		}
+	}
+
+	@Then("user verify Email")
+	public void user_verify_email() {
 		// Verify User Email
 		String actualEmail = driver.findElement(By.xpath("//*[@class='account-details']//*[@class='desc']//p"))
 				.getText().trim();
@@ -115,6 +127,10 @@ public class E2E_Test {
 		if (!actualEmail.equals(expectedEmail)) {
 			throw new RuntimeException("Invalid Email Address: " + actualEmail);
 		}
+	}
+
+	@Then("user verify Account Type")
+	public void user_verify_account_type() {
 		// Verify User Account Type
 		String actualAccountType = driver
 				.findElement(By.xpath("//*[@class='account-details']//*[@class='desc']//*[contains(@class,'role')]"))
@@ -123,58 +139,42 @@ public class E2E_Test {
 		if (!actualAccountType.equals(expectedAccountType)) {
 			throw new RuntimeException("Invalid Account Type: " + actualAccountType);
 		}
+	}
 
-		// Verify FirstName 
-		 String actualFirstName= driver.findElement(By.name("firstName")).getDomProperty("value");
-		 String expectedFirstName = "PT";
-		 if(!actualFirstName.equals(expectedFirstName)) {
-			 throw new RuntimeException("Invalid First Name: " + actualAccountType);
-		 }
-		 //Verify Lastname
-		 
-		 String actualLastName= driver.findElement(By.name("lastName")).getDomProperty("value");
-		 String expectedLastName = "Test";
-		 if(!actualLastName.equals(expectedLastName)) {
-			 throw new RuntimeException("Invalid Last Name: " + actualLastName);
-		 }
-		 
+	@Then("user verify First Name")
+	public void user_verify_first_name() {
+		// Verify FirstName
+		String actualFirstName = driver.findElement(By.name("firstName")).getDomProperty("value");
+		String expectedFirstName = "PT";
+		if (!actualFirstName.equals(expectedFirstName)) {
+			throw new RuntimeException("Invalid First Name: " + actualFirstName);
+		}
+	}
 
-		/*
-		 * 
-		 * Logout from the account
-		 */
-		 // Locate the Account Dropdown
-		 String firstName = "PT";
-		 driver.findElement(By.linkText(firstName)).click();
-		 
-		 new WebDriverWait(driver, Duration.ofSeconds(10))
-		 .until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Sign Out']")))
-		 .click();
-		 
-		 /*
-		  * Verify You are back to the Login Page
-		  * 1. Verify Login Page URL
-		  * 2. Check the Login Page Header Displayed: Login
-		  */
-		 
-		// Verifying the Login Page URL
-		 	Thread.sleep(5000);
-			String actualLoginPageURL2 = driver.getCurrentUrl();
-			String expectedLoginPageURL2 = "https://primetech-store-qa.herokuapp.com/login";
-			if (!actualLoginPageURL2.equals(expectedLoginPageURL2)) {
-				throw new RuntimeException("Login Page URL is not correct");
-			}
-			// Verifying the Login Page Header with Text: Login is Exist
-			new WebDriverWait(driver, Duration.ofSeconds(10))
-					.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h2[text()='Login']")));
-		 
-		/*
-		 * Kill the Driver
-		 * 
-		 */
-			
-			driver.quit();
+	@Then("user verify Last Name")
+	public void user_verify_last_name() {
+		// Verify Lastname
 
+		String actualLastName = driver.findElement(By.name("lastName")).getDomProperty("value");
+		String expectedLastName = "Test";
+		if (!actualLastName.equals(expectedLastName)) {
+			throw new RuntimeException("Invalid Last Name: " + actualLastName);
+		}
+	}
+
+	@When("user click logout button")
+	public void user_click_logout_button() {
+		// Locate the Account Dropdown
+		String firstName = "PT";
+		driver.findElement(By.linkText(firstName)).click();
+
+		new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Sign Out']"))).click();
+	}
+
+	@Then("user closed the browser")
+	public void user_closed_the_browser() {
+		driver.quit();
 	}
 
 }
