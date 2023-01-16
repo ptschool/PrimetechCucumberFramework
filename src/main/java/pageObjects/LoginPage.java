@@ -10,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginPgae extends BasePage{
+public class LoginPage extends BasePage{
 
 	private WebDriver driver;
 	// Pgae Factory Elements
@@ -26,7 +26,7 @@ public class LoginPgae extends BasePage{
 	// By locators
 	private By by_loginHeader  = By.xpath("//h2[text()='Login']");
 	
-	public LoginPgae(WebDriver driver) {
+	public LoginPage(WebDriver driver) {
 		super(driver);
 		this.driver = driver;
 		PageFactory.initElements(driver, this);

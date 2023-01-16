@@ -2,26 +2,19 @@ package stepDefinitions;
 
 import java.time.Duration;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import pageObjects.DashboardPage;
-import pageObjects.HomePage;
-import pageObjects.LoginPgae;
+import managers.PageObjectManager;
 
 public class Steps {
 
 	WebDriver driver;
-	HomePage homePage;
-	LoginPgae loginPage;
-	DashboardPage dashboardPage;
-
+	private PageObjectManager pageObjectManager;
 	@Given("user is on the Home Page")
 	public void user_is_on_the_home_page() throws InterruptedException {
 
@@ -31,75 +24,72 @@ public class Steps {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.get("https://primetech-store-qa.herokuapp.com/");
 
-		// We will create Object Of Home Page Class
-		homePage = new HomePage(driver);
-
-		// We will call the verify page logo methods
-		homePage.verifyLogo();
+		// Initialize Page Object Manager class object
+		pageObjectManager = new PageObjectManager(driver);
+		
 
 		// We will call verify page url method
-		homePage.verifyURL("https://primetech-store-qa.herokuapp.com/");
+		pageObjectManager.getHomePage().verifyURL("https://primetech-store-qa.herokuapp.com/");
 
 		// We will call verify page title method
-		homePage.verifyTitle();
+		pageObjectManager.getHomePage().verifyTitle();
 
 	}
 
 	@When("user click on login button")
 	public void user_click_on_login_button() {
-		homePage.clickWelcomeLink();
-		homePage.clickLoginButton();
+		pageObjectManager.getHomePage().clickWelcomeLink();
+		pageObjectManager.getHomePage().clickLoginButton();
 	}
 
 	@Then("user verify Login Page URL")
-	public void user_verify_login_page_url() {
-		loginPage = new LoginPgae(driver);
+	public void user_verify_login_page_url() throws InterruptedException {
+		pageObjectManager.getLoginPage().verifyURL("https://primetech-store-qa.herokuapp.com/login");
 	}
 
 	@Then("user verify Login Page Logo")
 	public void user_verify_login_page_logo() {
-		loginPage.verifyPageHeader();
+		pageObjectManager.getLoginPage().verifyPageHeader();
 
 	}
 
 	@Then("user login with valid credentials")
 	public void user_login_with_valid_credentials() {
-		loginPage.enterEmail("pt_test@gmail.com");
-		loginPage.enterPassword("Test@1234");
-		loginPage.clickLoginButton();
+		pageObjectManager.getLoginPage().enterEmail("pt_test@gmail.com");
+		pageObjectManager.getLoginPage().enterPassword("Test@1234");
+		pageObjectManager.getLoginPage().clickLoginButton();
 
 	}
 
 	@When("user dashboard page is displayed")
 	public void user_dashboard_page_is_displayed() throws InterruptedException {
-		dashboardPage = new DashboardPage(driver);
-		dashboardPage.verifyURL("https://primetech-store-qa.herokuapp.com/dashboard");
+		pageObjectManager.getDashboardPage().verifyURL("https://primetech-store-qa.herokuapp.com/dashboard");
 	}
 
 	@Then("user verify Email")
 	public void user_verify_email() {
-		dashboardPage.verifyEmail("pt_test@gmail.com");
+		pageObjectManager.getDashboardPage().verifyEmail("pt_test@gmail.com");
 	}
 
 	@Then("user verify Account Type")
 	public void user_verify_account_type() {
-		dashboardPage.verifyAccountType("Member");
+		pageObjectManager.getDashboardPage().verifyAccountType("Member");
 	}
 
 	@Then("user verify First Name")
 	public void user_verify_first_name() {
-		dashboardPage.verifyFirstName("PT");
+		pageObjectManager.getDashboardPage().verifyFirstName("PT");
 	}
 
 	@Then("user verify Last Name")
 	public void user_verify_last_name() {
-		dashboardPage.verifyLastName("Test");
+		pageObjectManager.getDashboardPage().verifyLastName("Test");
 	}
 
 	@When("user click logout button")
 	public void user_click_logout_button() {
-		dashboardPage.clickAccountDropdown("PT");
-		dashboardPage.clickSignoutButton();
+		pageObjectManager.getDashboardPage().clickAccountDropdown("PT");
+		pageObjectManager.getDashboardPage().clickSignoutButton();
 
 	}
 
