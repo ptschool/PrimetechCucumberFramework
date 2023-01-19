@@ -1,10 +1,13 @@
 package stepDefinitions;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import helpers.ConfigFileReader;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,21 +18,24 @@ public class Steps {
 
 	WebDriver driver;
 	private PageObjectManager pageObjectManager;
+	private ConfigFileReader config;
+	
 	@Given("user is on the Home Page")
-	public void user_is_on_the_home_page() throws InterruptedException {
-
+	public void user_is_on_the_home_page() throws InterruptedException, FileNotFoundException, IOException {
+		
+		config = new ConfigFileReader();
+		
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.get("https://primetech-store-qa.herokuapp.com/");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getImplicitlyWait()));
+		driver.get(config.getURL());
 
 		// Initialize Page Object Manager class object
 		pageObjectManager = new PageObjectManager(driver);
 		
-
 		// We will call verify page url method
-		pageObjectManager.getHomePage().verifyURL("https://primetech-store-qa.herokuapp.com/");
+		pageObjectManager.getHomePage().verifyURL(config.getURL());
 
 		// We will call verify page title method
 		pageObjectManager.getHomePage().verifyTitle();
@@ -44,7 +50,7 @@ public class Steps {
 
 	@Then("user verify Login Page URL")
 	public void user_verify_login_page_url() throws InterruptedException {
-		pageObjectManager.getLoginPage().verifyURL("https://primetech-store-qa.herokuapp.com/login");
+		pageObjectManager.getLoginPage().verifyURL(config.getURL() +   "login");
 	}
 
 	@Then("user verify Login Page Logo")
@@ -63,7 +69,7 @@ public class Steps {
 
 	@When("user dashboard page is displayed")
 	public void user_dashboard_page_is_displayed() throws InterruptedException {
-		pageObjectManager.getDashboardPage().verifyURL("https://primetech-store-qa.herokuapp.com/dashboard");
+		pageObjectManager.getDashboardPage().verifyURL(config.getURL() +  "dashboard");
 	}
 
 	@Then("user verify Email")
