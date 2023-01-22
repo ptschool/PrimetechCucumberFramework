@@ -3,18 +3,23 @@ Feature: Verify Account Information
   Verify Account Infrmation is Correct for Different Types of Accounts
 
   @account
-  Scenario: Verify Account Details
+  Scenario Outline: Verify Account Details
     Given user is on the Home Page
     And user click on login button 
 		Then user verify Login Page URL
 		And user verify Login Page Logo
-		Then user login with valid credentials
+		Then user login with "<email>" and "<password>"
 		When user dashboard page is displayed
-		Then user verify Email
-		And user verify Account Type
-		And user verify First Name
-		And user verify Last Name
-		When user click logout button
+		Then user verify Email is "<email>"
+		And user verify Account Type is "<accountType>"
+		And user verify First Name is "<firstName>"
+		And user verify Last Name is "<lastName>"
+		When user click logout button for account "<firstName>"
 		Then user verify Login Page URL
 		And user verify Login Page Logo
 		Then user closed the browser
+Examples:
+	|     email        | password  |  accountType | firstName | lastName |
+	|pt_test@gmail.com | Test@1234 |  Member      |  PT       | Test     |
+	|pt_admin@gmail.com| Test@1234 |  Admin       | Harry     | Potter   |
+	
