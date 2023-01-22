@@ -12,21 +12,18 @@
 			<artifactId>selenium-java</artifactId>
 			<version>4.7.2</version>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>5.3.1</version>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
 			<version>7.11.0</version>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
@@ -34,10 +31,14 @@
 			<version>7.11.0</version>
 			<scope>test</scope>
 		</dependency>
-
-
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-picocontainer</artifactId>
+			<version>7.11.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -52,5 +53,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
