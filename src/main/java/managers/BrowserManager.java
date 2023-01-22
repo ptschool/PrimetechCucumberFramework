@@ -30,6 +30,9 @@ public class BrowserManager {
 		return driver;
 	}
 	
+	public void closeDriver() {
+		driver.quit();
+	}
 	
 	private WebDriver createDriver() {
 		
