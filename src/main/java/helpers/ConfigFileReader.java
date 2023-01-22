@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import enums.BrowserType;
+import enums.EnvironmentType;
+
 public class ConfigFileReader {
 
 	private final String propertyFilePath = "configs/configuration.properties";
@@ -48,7 +51,47 @@ public class ConfigFileReader {
 	}
 	
 	
+	public BrowserType getBrowser() {
+		String browser = prop.getProperty("browser");
+		if(browser==null) {
+			throw new RuntimeException("browser value is not defined in the Configuration.properties file");
+		}
+		if(browser.equalsIgnoreCase("chrome")) {
+			return BrowserType.CHROME;
+		}else if(browser.equalsIgnoreCase("firefox")) {
+			return BrowserType.FIREFOX;
+		}else if(browser.equalsIgnoreCase("ie")) {
+			return BrowserType.IE;
+		}else {
+			throw new RuntimeException("Browser Name in Configuration.properties file is invalid: " + browser);
+		}
+	}
 	
+	public EnvironmentType getEnvironment() {
+		String environment = prop.getProperty("environment");
+		if(environment==null) {
+			throw new RuntimeException("environment value is not defined in the Configuration.properties file");
+		}
+		if(environment.equalsIgnoreCase("local")) {
+			return EnvironmentType.LOCAL;
+		}else if(environment.equalsIgnoreCase("remote")) {
+			return EnvironmentType.REMOTE;
+		}else {
+			throw new RuntimeException("Environment in Configuration.properties file is invalid: " + environment);
+		}
+	}
+	
+	public boolean getBrowserWindowMaximize() {
+		String windowsMaximize = prop.getProperty("windowsMaximize");
+		
+		if(windowsMaximize!=null) {
+			 return Boolean.parseBoolean(windowsMaximize);
+		}
+		// default 
+		return true;
+		
+		
+	}
 	
 
 }

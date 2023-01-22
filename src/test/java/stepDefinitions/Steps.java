@@ -2,16 +2,13 @@ package stepDefinitions;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-import helpers.ConfigFileReader;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import managers.BrowserManager;
 import managers.FileReaderManager;
 import managers.PageObjectManager;
 
@@ -19,16 +16,14 @@ public class Steps {
 
 	WebDriver driver;
 	private PageObjectManager pageObjectManager;
+	BrowserManager browserManager;
 	
 	@Given("user is on the Home Page")
 	public void user_is_on_the_home_page() throws InterruptedException, FileNotFoundException, IOException {
 		
+		browserManager = new BrowserManager();
+		 driver = browserManager.getDriver();
 		
-		
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(FileReaderManager.getInstance().getConfigReader().getImplicitlyWait()));
 		driver.get(FileReaderManager.getInstance().getConfigReader().getURL());
 
 		// Initialize Page Object Manager class object
