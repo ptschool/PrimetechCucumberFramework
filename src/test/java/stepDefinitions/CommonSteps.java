@@ -3,7 +3,6 @@ package stepDefinitions;
 import org.openqa.selenium.WebDriver;
 
 import cucumber.TestContext;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageObjects.BasePage;
 
