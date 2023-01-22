@@ -15,12 +15,10 @@ public class HomePageSteps {
 	
 	TestContext testContext;
 	HomePage homePage;
-	WebDriver driver;
-	
+
 	public HomePageSteps(TestContext context) {
 		this.testContext  = context;
 		homePage = testContext.getPageObjectManager().getHomePage();
-		driver = testContext.getBrowserManager().getDriver();
 		
 	}
 	
@@ -29,8 +27,6 @@ public class HomePageSteps {
 	public void user_is_on_the_home_page() throws InterruptedException, FileNotFoundException, IOException {
 	
 	
-		
-		driver.get(FileReaderManager.getInstance().getConfigReader().getURL());
 		// We will call verify page url method
 		homePage.verifyURL(FileReaderManager.getInstance().getConfigReader().getURL());
 

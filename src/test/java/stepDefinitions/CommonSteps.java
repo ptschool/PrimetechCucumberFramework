@@ -35,10 +35,5 @@ public class CommonSteps {
 		basePage.clickSignoutButton();
 
 	}
-	
 
-	@Then("user closed the browser")
-	public void user_closed_the_browser() {
-		driver.quit();
-	}
 }

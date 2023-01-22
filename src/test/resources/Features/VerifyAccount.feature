@@ -2,7 +2,7 @@
 Feature: Verify Account Information
   Verify Account Infrmation is Correct for Different Types of Accounts
 
-  @account
+@account
   Scenario Outline: Verify Account Details
     Given user is on the Home Page
     And user click on login button 
@@ -17,9 +17,8 @@ Feature: Verify Account Information
 		When user click logout button for account "<firstName>"
 		Then user verify Login Page URL
 		And user verify Login Page Logo
-		Then user closed the browser
+
 Examples:
 	|     email        | password  |  accountType | firstName | lastName |
 	|pt_test@gmail.com | Test@1234 |  Member      |  PT       | Test     |
 	|pt_admin@gmail.com| Test@1234 |  Admin       | Harry     | Potter   |
-	
