@@ -1,4 +1,5 @@
 
+@account
 Feature: Verify Account Information
   Verify Account Infrmation is Correct for Different Types of Accounts
 
